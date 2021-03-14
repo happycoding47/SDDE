@@ -1,0 +1,33 @@
+Class Edge:
+  def __init__(self, start, end, weight):
+    self.start = start
+    self.end = end
+    self.weight = weight
+    
+Class Graph:
+  def __init__(self, edges, Num_v):
+    self.adj_list = [None] * Num_v
+    
+    for e in edges:
+      self.adj_list[e.start].append([e.end, e.weight])
+      
+      
+def shortestPath():
+
+      
+
+
+
+
+
+
+
+
+
+
+
+# example:
+edges = [Edge(0, 1, 6), Edge(1, 2, 7), Edge(2, 0, 5), Edge(2, 1, 4),
+            Edge(3, 2, 10), Edge(4, 5, 1), Edge(5, 4, 3)]
+ 
+graph = Graph(edges, 6)
