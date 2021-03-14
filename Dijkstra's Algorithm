@@ -7,7 +7,8 @@ Class Edge:
 Class Graph:
   def __init__(self, edges, Num_v):
     self.adj_list = [None] * Num_v
-    
+    for i in range(Num_v):
+      self.adj_list[i] = []
     for e in edges:
       self.adj_list[e.start].append([e.end, e.weight])
       
@@ -27,6 +28,16 @@ def shortestPath():
 
 
 # example:
+def printGraph(graph):
+	for src in range(len(graph.adj)):
+		# print current vertex and all its neighboring vertices
+		for edge in graph.adj[src]:
+			print(f"({src} —> {edge[0]}, {edge[1]}) ", end='')
+		print()
+
+
+if __name__ == '__main__': 
+
 edges = [Edge(0, 1, 6), Edge(1, 2, 7), Edge(2, 0, 5), Edge(2, 1, 4),
             Edge(3, 2, 10), Edge(4, 5, 1), Edge(5, 4, 3)]
  
