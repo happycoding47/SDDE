@@ -31,3 +31,17 @@ edges = [Edge(0, 1, 6), Edge(1, 2, 7), Edge(2, 0, 5), Edge(2, 1, 4),
             Edge(3, 2, 10), Edge(4, 5, 1), Edge(5, 4, 3)]
  
 graph = Graph(edges, 6)
+
+
+
+Expand on the graph you wrote for lab to write an application that can calculate the fastest route between two points.
+
+1) Begin by devising a data structure that can easily contain a graph with weighted edge, with two vertices and a integer representing the cost of travelling across that edge. There are a lot of ways to do this (e.g. edge lists, adjacency matrices, adjacency lists), and you should leverage one of the separate files in repl.it to store your test data. Pick something that feels relevant to you. For example, paths between your favorite places in Seattle:
+
+("Queen Anne", "Capitol Hill", 3), ("SODO", "Bellevue", 10), ...
+
+2) Using your graph class created above, implement the method ShortestPath() that returns the shortest path between two vertices. In order to calculate the shortest path between any two vertices on a map, you must first calculate the shortest path to all of the vertices. To accomplish this, you will need to store each vertex, the path used to get there, and the total cost of that path. Think critically about how you can determine when you can exclude a vertex from your search.
+
+3) Write some tests to show your code in action. You can either use a testing framework like Pytest or NUnit or just test by writing methods that run your code and print results. Your tests should already know what the right answer is, and assert that your code gets that right answer.
+
+Example: Console.WriteLine($"Shortest path between Queen Anne and Bellevue is length 19: {result == 19})
