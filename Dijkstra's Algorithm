@@ -1,19 +1,23 @@
-Class Edge:
-  def __init__(self, start, end, weight):
-    self.start = start
-    self.end = end
-    self.weight = weight
-    
+from collections import defaultdict
+
+Class Node:
+	def __init__(self, end, weight):
+		self.end = end
+		self.weight = weight
+
 Class Graph:
-  def __init__(self, edges, Num_v):
-    self.adj_list = [None] * Num_v
-    for i in range(Num_v):
-      self.adj_list[i] = []
-    for e in edges:
-      self.adj_list[e.start].append([e.end, e.weight])
-      
-      
-def shortestPath():
+	def __init__(self, num_v):
+		self.num_v = num_v
+		self.adjlist = {}
+	
+	def add_edge(self, start, node):
+		if start not in adjlist:
+			adjlist[start] = {}
+		adjlist[start].append(node)
+		
+	
+	def shortestPath(self, source, dest):
+		dist = float('inf')
 
       
 
@@ -27,21 +31,7 @@ def shortestPath():
 
 
 
-# example:
-def printGraph(graph):
-	for src in range(len(graph.adj)):
-		# print current vertex and all its neighboring vertices
-		for edge in graph.adj[src]:
-			print(f"({src} —> {edge[0]}, {edge[1]}) ", end='')
-		print()
 
-
-if __name__ == '__main__': 
-
-edges = [Edge(0, 1, 6), Edge(1, 2, 7), Edge(2, 0, 5), Edge(2, 1, 4),
-            Edge(3, 2, 10), Edge(4, 5, 1), Edge(5, 4, 3)]
- 
-graph = Graph(edges, 6)
 
 
 
