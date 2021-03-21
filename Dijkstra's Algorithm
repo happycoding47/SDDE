@@ -1,4 +1,5 @@
 from collections import defaultdict
+from numpy import inf
 
 Class Node:
 	def __init__(self, end, weight):
@@ -8,16 +9,25 @@ Class Node:
 Class Graph:
 	def __init__(self, num_v):
 		self.num_v = num_v
-		self.adjlist = {}
+		self.adjlist = defaultdict(list)
 	
-	def add_edge(self, start, node):
+	def add_edge(self, start, end, weight):
+		node = Node(end, weight)
 		if start not in adjlist:
 			adjlist[start] = {}
 		adjlist[start].append(node)
 		
 	
 	def shortestPath(self, source, dest):
-		dist = float('inf')
+		path ={}
+		distance = {source: 0}
+		
+		currNode = source
+		while currNode != dest:
+			for neighbor in self.adjlist[currNode]:
+				
+		
+		
 
       
 
