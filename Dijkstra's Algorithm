@@ -2,8 +2,8 @@ from collections import defaultdict
 from numpy import inf
 
 Class Node:
-	def __init__(self, end, weight):
-		self.end = end
+	def __init__(self, v2, weight):
+		self.v2 = v2
 		self.weight = weight
 
 Class Graph:
@@ -11,23 +11,43 @@ Class Graph:
 		self.num_v = num_v
 		self.adjlist = defaultdict(list)
 	
-	def add_edge(self, start, end, weight):
-		node = Node(end, weight)
+	def add_edge(self, v1, v2, weight):
+		node = Node(v2, weight)
 		if start not in adjlist:
-			adjlist[start] = {}
-		adjlist[start].append(node)
+			adjlist[v1] = {}
+		adjlist[v1].append(node)
 		
 	
 	def shortestPath(self, source, dest):
-		path ={}
-		distance = {source: 0}
-		
+		path = {source: (None, 0)}    # path stores the nodes for the shortest path. vertice: (previous vertice, distance to source)
 		currNode = source
+		visited = set()
+		
 		while currNode != dest:
+			visited.add(currNode)
+			dist_to_curr = path[currNode][1]
+			
 			for neighbor in self.adjlist[currNode]:
-				
+				dist_to_source = neighbor.weight + dist_to_curr
+				if neighbor not in path:
+					path[neighbor] = (currNode, dist_to_source)
+					
+				else:
+					if path[neighbor][1] > dist_to_source:
+						distance[neighbor] = (currNode, dist_to_source)
+			
+			next_nodes = {node: path[node] for node in path if node not in visited}
+			currNode = min(next_nodes, key = lambda k: next_nodes[k][1])
+			
+		shortest = []
+		while currNode:
+			shortest.append(currNode)
+			previous = path[currNode][0]
+			currNode = previous
+		return shortest[::-1]
 		
-		
+	
+
 
       
 
