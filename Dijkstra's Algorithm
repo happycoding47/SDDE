@@ -1,78 +1,63 @@
 from collections import defaultdict
-from numpy import inf
 
-Class Node:
-	def __init__(self, v2, weight):
-		self.v2 = v2
-		self.weight = weight
+class Graph:
+    def __init__(self):
+        self.adjlist = defaultdict(list)
+        self.weights = {}
 
-Class Graph:
-	def __init__(self, num_v):
-		self.num_v = num_v
-		self.adjlist = defaultdict(list)
-	
-	def add_edge(self, v1, v2, weight):
-		node = Node(v2, weight)
-		if start not in adjlist:
-			adjlist[v1] = {}
-		adjlist[v1].append(node)
-		
-	
-	def shortestPath(self, source, dest):
-		path = {source: (None, 0)}    # path stores the nodes for the shortest path. vertice: (previous vertice, distance to source)
-		currNode = source
-		visited = set()
-		
-		while currNode != dest:
-			visited.add(currNode)
-			dist_to_curr = path[currNode][1]
-			
-			for neighbor in self.adjlist[currNode]:
-				dist_to_source = neighbor.weight + dist_to_curr
-				if neighbor not in path:
-					path[neighbor] = (currNode, dist_to_source)
-					
-				else:
-					if path[neighbor][1] > dist_to_source:
-						distance[neighbor] = (currNode, dist_to_source)
-			
-			next_nodes = {node: path[node] for node in path if node not in visited}
-			currNode = min(next_nodes, key = lambda k: next_nodes[k][1])
-			
-		shortest = []
-		while currNode:
-			shortest.append(currNode)
-			previous = path[currNode][0]
-			currNode = previous
-		return shortest[::-1]
-		
-	
+    @staticmethod
+    def test_path():
+        g = Graph()
+        g.add_edge('CA', 'NY', 17)
+        g.add_edge('CA', 'TX', 10)
+        g.add_edge('CA', 'IL', 8)
+        g.add_edge('CA', 'OH', 7)
+        g.add_edge('NY', 'TX', 8)
+        g.add_edge('NY', 'OK', 7)
+        g.add_edge('TX', 'OK', 2)
+        g.add_edge('TX', 'MN', 5)
+        g.add_edge('IL', 'WI', 2)
+        g.add_edge('OK', 'MO', 3)
+        g.add_edge('MO', 'MN', 5)
+
+        assert g.shortestPath("CA", "MO") == ['CA', 'TX', 'OK', 'MO'], "Invalid path"
+        assert g.shortestPath("NY", "MN") == ['NY', 'TX', 'MN'], "Invalid path"
+
+    def add_edge(self, v1, v2, weight):
+        self.adjlist[v1].append(v2)
+        self.weights[(v1, v2)] = weight
 
 
-      
+    def shortestPath(self, source, dest):
+        path = {source: (None, 0)}  # path stores the nodes for the shortest path. vertice: (previous vertice, distance to source)
+        currNode = source
+        visited = []
 
+        while currNode != dest:
+            visited.append(currNode)
+            dist_to_curr = path[currNode][1]
 
+            for neighbor in self.adjlist[currNode]:
+                dist_to_source = self.weights[(currNode, neighbor)] + dist_to_curr
+                if neighbor not in path:
+                    path[neighbor] = (currNode, dist_to_source)
 
+                else:
+                    if path[neighbor][1] > dist_to_source:
+                        path[neighbor] = (currNode, dist_to_source)
 
+            next_nodes = {node: path[node] for node in path if node not in visited}
+            currNode = min(next_nodes, key=lambda k: next_nodes[k][1])
 
+        path_distance = path[currNode][1]
+        shortest = []
+        while currNode:
+            shortest.append(currNode)
+            previous = path[currNode][0]
+            currNode = previous
 
+        print(f"The shortest path between {source} and {dest} is {shortest[::-1]} with a distance of {path_distance}")
+        return shortest[::-1]
 
+Graph.test_path()
 
-
-
-
-
-
-
-
-Expand on the graph you wrote for lab to write an application that can calculate the fastest route between two points.
-
-1) Begin by devising a data structure that can easily contain a graph with weighted edge, with two vertices and a integer representing the cost of travelling across that edge. There are a lot of ways to do this (e.g. edge lists, adjacency matrices, adjacency lists), and you should leverage one of the separate files in repl.it to store your test data. Pick something that feels relevant to you. For example, paths between your favorite places in Seattle:
-
-("Queen Anne", "Capitol Hill", 3), ("SODO", "Bellevue", 10), ...
-
-2) Using your graph class created above, implement the method ShortestPath() that returns the shortest path between two vertices. In order to calculate the shortest path between any two vertices on a map, you must first calculate the shortest path to all of the vertices. To accomplish this, you will need to store each vertex, the path used to get there, and the total cost of that path. Think critically about how you can determine when you can exclude a vertex from your search.
-
-3) Write some tests to show your code in action. You can either use a testing framework like Pytest or NUnit or just test by writing methods that run your code and print results. Your tests should already know what the right answer is, and assert that your code gets that right answer.
-
-Example: Console.WriteLine($"Shortest path between Queen Anne and Bellevue is length 19: {result == 19})
