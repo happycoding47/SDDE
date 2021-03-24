@@ -19,13 +19,14 @@ class Graph:
         g.add_edge('IL', 'WI', 2)
         g.add_edge('OK', 'MO', 3)
         g.add_edge('MO', 'MN', 5)
-        assert g.shortestPath("CA", "MO") == ['CA', 'TX', 'OK', 'MO'], "Invalid path"
-        assert g.shortestPath("NY", "MN") == ['NY', 'TX', 'MN'], "Invalid path"
 
+        assert g.shortestPath("CA", "MO") == ['CA', 'TX', 'OK', 'MO'], "Wrong path"
+        assert g.shortestPath("NY", "WI") == "Invalid path"
 
     def add_edge(self, v1, v2, weight):
         self.adjlist[v1].append(v2)
         self.weights[(v1, v2)] = weight
+
 
     def shortestPath(self, source, dest):
         path = {source: (None, 0)}  # path stores the nodes for the shortest path. vertice: (previous vertice, distance to source)
@@ -46,6 +47,8 @@ class Graph:
                         path[neighbor] = (currNode, dist_to_source)
 
             next_nodes = {node: path[node] for node in path if node not in visited}
+            if not next_nodes:
+                return "Invalid path"
             currNode = min(next_nodes, key=lambda k: next_nodes[k][1])
 
         path_distance = path[currNode][1]
@@ -57,7 +60,6 @@ class Graph:
 
         print(f"The shortest path between {source} and {dest} is {shortest[::-1]} with a distance of {path_distance}")
         return shortest[::-1]
-
 
 Graph.test_path()
 
