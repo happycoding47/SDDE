@@ -1,65 +1,80 @@
+# shortest path-- Dijkstra's Algorithm
+
 from collections import defaultdict
 
 class Graph:
     def __init__(self):
         self.adjlist = defaultdict(list)
-        self.weights = {}
+        self.vertex = []
 
     @staticmethod
     def test_path():
         g = Graph()
+        g.add_vertex('CA')
+        g.add_vertex('NY')
+        g.add_vertex('TX')
+        g.add_vertex('OK')
+        g.add_vertex('MO')
+        g.add_vertex('WI')
         g.add_edge('CA', 'NY', 17)
         g.add_edge('CA', 'TX', 10)
-        g.add_edge('CA', 'IL', 8)
-        g.add_edge('CA', 'OH', 7)
+        g.add_edge('CA', 'OK', 7)
         g.add_edge('NY', 'TX', 8)
         g.add_edge('NY', 'OK', 7)
         g.add_edge('TX', 'OK', 2)
-        g.add_edge('TX', 'MN', 5)
-        g.add_edge('IL', 'WI', 2)
         g.add_edge('OK', 'MO', 3)
-        g.add_edge('MO', 'MN', 5)
+        g.add_edge('MO', 'WI', 2)
 
-        assert g.shortestPath("CA", "MO") == ['CA', 'TX', 'OK', 'MO'], "Wrong path"
-        assert g.shortestPath("NY", "WI") == "Invalid path"
+        g.shortestPath('CA', 'WI')
+        g.shortestPath('MO', 'OK')
+
+        assert g.shortestPath("CA", "WI") == ['CA', 'OK', 'MO', 'WI'], "Wrong path"
+        assert g.shortestPath('MO', 'OK') == float('inf'), "There isn't a path"
+
+    def add_vertex(self, v):
+        self.vertex.append(v)
 
     def add_edge(self, v1, v2, weight):
-        self.adjlist[v1].append(v2)
-        self.weights[(v1, v2)] = weight
-
+        node = [v2, weight]
+        self.adjlist[v1].append(node)
 
     def shortestPath(self, source, dest):
-        path = {source: (None, 0)}  # path stores the nodes for the shortest path. vertice: (previous vertice, distance to source)
-        currNode = source
+        distance = {}
+        for v in self.vertex:
+            distance[v] = float('inf')
+        distance[source] = 0
+
+        previous = defaultdict(list)
         visited = []
+        next_nodes = {}
+        for v, d in distance.items():
+            next_nodes[v] = d
 
-        while currNode != dest:
-            visited.append(currNode)
-            dist_to_curr = path[currNode][1]
+        while next_nodes:
+            curr_node = min(next_nodes, key = lambda k: next_nodes[k])
+            del next_nodes[curr_node]
+            visited.append(curr_node)
 
-            for neighbor in self.adjlist[currNode]:
-                dist_to_source = self.weights[(currNode, neighbor)] + dist_to_curr
-                if neighbor not in path:
-                    path[neighbor] = (currNode, dist_to_source)
+            for neighbor in self.adjlist[curr_node]:
+                if neighbor[0] not in visited:
+                    new_distance = neighbor[1] + distance[curr_node]
+                    if new_distance < distance[neighbor[0]]:
+                        distance[neighbor[0]] = new_distance
+                        next_nodes[neighbor[0]] = new_distance
+                        for x in previous[curr_node]:
+                            previous[neighbor[0]].append(x)
+                        previous[neighbor[0]].append(curr_node)
 
-                else:
-                    if path[neighbor][1] > dist_to_source:
-                        path[neighbor] = (currNode, dist_to_source)
-
-            next_nodes = {node: path[node] for node in path if node not in visited}
-            if not next_nodes:
-                return "Invalid path"
-            currNode = min(next_nodes, key=lambda k: next_nodes[k][1])
-
-        path_distance = path[currNode][1]
-        shortest = []
-        while currNode:
-            shortest.append(currNode)
-            previous = path[currNode][0]
-            currNode = previous
-
-        print(f"The shortest path between {source} and {dest} is {shortest[::-1]} with a distance of {path_distance}")
-        return shortest[::-1]
+        path = previous[dest] + [dest]
+        path_distance = distance[dest]
+        if path_distance == float('inf'):
+            print('No available path')
+            return path_distance
+        print(f"The shortest path between {source} and {dest} is {path} with a distance of {path_distance}")
+        return path
 
 Graph.test_path()
 
+
+#References:
+#1. https://algotree.org/algorithms/single_source_shortest_path/dijkstras_shortest_path_python/
